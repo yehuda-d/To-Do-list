@@ -1,11 +1,13 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+const path = require('path');
+app.use(express.json());
+app.use(express.static(path.join(__dirname)));
 
 const tasks = [];
 let nextID = 1;
 
-app.use(express.json());
 
 app.get('/',(req,res)=>{res.sendFile(__dirname + '/ToDoList.html')});
 
