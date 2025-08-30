@@ -28,8 +28,27 @@
         async function getData() {
             let response = await fetch('/tasks');
             let data = await response.json();
-            console.log(data);
+            creatTable(data);
             
+        }
+        
+        function creatTable(data) {
+            let txt = "";
+            for (obj of data) {
+                if(obj){
+                    txt += `<tr>`;
+                    txt += `<td>${obj.id}</td>`;
+                    txt += `<td>${obj.text}</td>`;
+                    txt += `<td>${obj.isDone}</td>`;
+                    txt += `<td><button>✏️</button></td>`;
+                    txt += `<td><button>🗑️</button></td>`;
+
+                    txt += `</tr>`;
+
+                }
+    
+            }
+            document.getElementById("myTable").innerHTML = txt;
         }
         getData();
     </script>
