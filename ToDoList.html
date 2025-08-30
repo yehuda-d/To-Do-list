@@ -25,7 +25,13 @@
     </table>
 
     <script>
-
+        async function getData() {
+            let response = await fetch('/tasks');
+            let data = await response.json();
+            console.log(data);
+            
+        }
+        getData();
     </script>
 </body>
 </html>
