@@ -49,7 +49,7 @@
                     txt += `<tr>`;
                     txt += `<td>${obj.id}</td>`;
                     txt += `<td>${obj.text}</td>`;
-                    txt += `<td>${obj.isDone}</td>`;
+                    txt += `<td><button onclick = "toggleDone(${obj.id}, ${obj.isDone})">${obj.isDone ? '☑️' : '☐'}</button></td>`;
                     txt += `<td><button onclick = "taskById(${obj.id})">✏️</button></td>`;
                     txt += `<td><button onclick = "deleteTask(${obj.id})">🗑️</button></td>`;
 
@@ -72,7 +72,7 @@
                 // if(response.ok){
                 //     alert("added luckly")
                 // }
-                if(response.status = 201){
+                if(response.status == 201){
                     alert("added luckly")
                 }
                  getData();
@@ -130,6 +130,19 @@
                 alert(err);
             }
         }
+
+        async function toggleDone(id, currentValue) {
+  try {
+    await fetch(`/tasks/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify({ isDone: !currentValue })
+    });
+    getData(); // לרענן טבלה
+  } catch (err) {
+    alert(err);
+  }
+}
 
         getData();
     </script>
