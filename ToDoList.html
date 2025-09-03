@@ -50,7 +50,7 @@
                     txt += `<td>${obj.text}</td>`;
                     txt += `<td>${obj.isDone}</td>`;
                     txt += `<td><button>✏️</button></td>`;
-                    txt += `<td><button>🗑️</button></td>`;
+                    txt += `<td><button onclick = "deleteTask(${obj.id})">🗑️</button></td>`;
 
                     txt += `</tr>`;
 
@@ -68,7 +68,10 @@
                     headers: {'Content-type':'application/json'},
                     body: JSON.stringify({txt})
                 })
-                if(response.ok){
+                // if(response.ok){
+                //     alert("added luckly")
+                // }
+                if(response.status = 201){
                     alert("added luckly")
                 }
                  getData();
@@ -76,6 +79,19 @@
 
             }catch(err){
                 alert(err);
+            }
+        }
+
+        async function deleteTask(id) {
+            try {
+                confirm("האם למחוק?")
+                let response = await fetch(`/tasks/${id}`,{
+                    method: 'DELETE'
+                })
+                getData();
+            } catch (err) {
+                alert(err);
+                
             }
         }
 
