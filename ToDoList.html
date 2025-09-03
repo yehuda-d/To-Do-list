@@ -9,6 +9,7 @@
     <h1>To Do List</h1>
     
     <div>
+        <input type="hidden" id="id">
         <label for="txt">Text: </label> 
         <br>
         <textarea id="txt" maxlength="50"></textarea>
@@ -49,7 +50,7 @@
                     txt += `<td>${obj.id}</td>`;
                     txt += `<td>${obj.text}</td>`;
                     txt += `<td>${obj.isDone}</td>`;
-                    txt += `<td><button>✏️</button></td>`;
+                    txt += `<td><button onclick = "taskById(${obj.id})">✏️</button></td>`;
                     txt += `<td><button onclick = "deleteTask(${obj.id})">🗑️</button></td>`;
 
                     txt += `</tr>`;
@@ -84,14 +85,24 @@
 
         async function deleteTask(id) {
             try {
-                confirm("האם למחוק?")
                 let response = await fetch(`/tasks/${id}`,{
                     method: 'DELETE'
                 })
                 getData();
             } catch (err) {
                 alert(err);
+            }
+        }
+
+        async function taskById(id) {
+            try{
+                let response = await fetch(`/tasks/${id}`);
+                let obj = await response.json();
+                document.getElementById('id').value = obj.id;
+                document.getElementById('txt').value = obj.text;
                 
+            }catch(err){
+                alert(err);
             }
         }
 
