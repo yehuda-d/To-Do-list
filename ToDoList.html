@@ -13,7 +13,7 @@
         <label for="txt">Text: </label> 
         <br>
         <textarea id="txt" maxlength="50"></textarea>
-        <button onclick="addTask()">Send</button>
+        <button onclick="addOrEdit()">Send</button>
     </div>
 
     <table border="1">
@@ -102,6 +102,31 @@
                 document.getElementById('txt').value = obj.text;
                 
             }catch(err){
+                alert(err);
+            }
+        }
+
+        function addOrEdit(){
+            let id = document.getElementById('id').value;
+            if(id){
+                editTask(id);
+            }else{
+                addTask();
+            }
+        }
+
+        async function editTask(id) {
+            try {
+                let txt = document.getElementById('txt').value;
+                let response = await fetch(`/tasks/${id}`,{
+                    method: 'PATCH',
+                    headers: {'Content-type':'application/json'},
+                    body: JSON.stringify({txt})
+                })
+                getData();
+                document.getElementById('id').value = "";
+                document.getElementById('txt').value = "";
+            } catch (err) {
                 alert(err);
             }
         }
