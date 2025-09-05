@@ -21,7 +21,7 @@
         <button onclick="addOrEdit()">Send</button>
     </div>
 
-    <label for="">search</label><input type="search" placeholder="search" id="search">
+    <input placeholder="Search..." id="search" oninput="sortTable()">
 
     <table border="1">
         <thead>
@@ -41,11 +41,12 @@
     </table>
 
     <script>
+        let data = [];
         async function getData() {
             let response = await fetch('/tasks',{
                 method:'GET'
             });
-            let data = await response.json();
+            data = await response.json();
             creatTable(data);
             
         }
@@ -170,6 +171,15 @@
 //     alert(err);
 //   }
 // }
+        function sortTable(){
+            let val =  document.getElementById('search').value;
+            let sorted = data.filter(obj=>obj && obj.text.includes(val));
+            if(sorted){
+                creatTable(sorted);
+            }else{
+                creatTable(data);
+            }
+        }
 
         getData();
     </script>
