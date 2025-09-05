@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .rowClass{
+            text-decoration:line-through;
+        }
+    </style>
 </head>
 <body>
     <h1>To Do List</h1>
@@ -16,12 +21,15 @@
         <button onclick="addOrEdit()">Send</button>
     </div>
 
+    <label for="">search</label><input type="search" placeholder="search" id="search">
+
     <table border="1">
         <thead>
             <tr>
-                <th>ID</th>
+                <!-- <th>ID</th> -->
+                 <th></th>
                 <th>Text</th>
-                <th>IsDone</th>
+                <!-- <th>IsDone</th> -->
                 <th>Edit</th>
                 <th>Delete</th>
 
@@ -46,10 +54,13 @@
             let txt = "";
             for (obj of data) {
                 if(obj){
-                    txt += `<tr>`;
-                    txt += `<td>${obj.id}</td>`;
+                    let row = obj.isDone ? "rowClass" : "";
+                    let check = obj.isDone ? "checked" : "";
+                    txt += `<tr class = '${row}'>`;
+                    // txt += `<td>${obj.id}</td>`;
+                    txt += `<td><input type="checkbox" onchange = "isChecked(this,${obj.id})" ${check}></td>`
                     txt += `<td>${obj.text}</td>`;
-                    txt += `<td><button onclick = "toggleDone(${obj.id}, ${obj.isDone})">${obj.isDone ? '☑️' : '☐'}</button></td>`;
+                    // txt += `<td><button onclick = "toggleDone(${obj.id}, ${obj.isDone})">${obj.isDone ? '☑️' : '☐'}</button></td>`;
                     txt += `<td><button onclick = "taskById(${obj.id})">✏️</button></td>`;
                     txt += `<td><button onclick = "deleteTask(${obj.id})">🗑️</button></td>`;
 
@@ -106,6 +117,22 @@
             }
         }
 
+        async function isChecked(element,id) {
+              try {
+                let isDone = element.checked;                
+                let response = await fetch(`/tasks/${id}`,{
+                    method: 'PATCH',
+                    headers: {'Content-type':'application/json'},
+                    body: JSON.stringify({isDone})
+                })
+                    getData();
+                // document.getElementById('id').value = "";
+                // document.getElementById('txt').value = "";
+            } catch (err) {
+                alert(err);
+            }
+        }
+
         function addOrEdit(){
             let id = document.getElementById('id').value;
             if(id){
@@ -131,18 +158,18 @@
             }
         }
 
-        async function toggleDone(id, currentValue) {
-  try {
-    await fetch(`/tasks/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify({ isDone: !currentValue })
-    });
-    getData(); // לרענן טבלה
-  } catch (err) {
-    alert(err);
-  }
-}
+//         async function toggleDone(id, currentValue) {
+//   try {
+//     await fetch(`/tasks/${id}`, {
+//       method: 'PATCH',
+//       headers: { 'Content-type': 'application/json' },
+//       body: JSON.stringify({ isDone: !currentValue })
+//     });
+//     getData(); // לרענן טבלה
+//   } catch (err) {
+//     alert(err);
+//   }
+// }
 
         getData();
     </script>
